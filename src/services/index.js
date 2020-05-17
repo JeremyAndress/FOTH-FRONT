@@ -2,8 +2,7 @@ import axios from 'axios'
 
 const urlBase = 'https://swapi.co/api'
 
-const readUrl = (url = '') =>
-  url.startsWith('http://') || url.startsWith('https://') ? url : `${urlBase}/${url}`
+const readUrl = (url = '') =>  `${urlBase}/${url}`
 
 const get = (url = '', headers = {}) => axios.get(readUrl(url), {
   headers: {
