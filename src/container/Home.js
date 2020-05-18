@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
+import Button from '@material-ui/core/Button';
+import {Load} from '../store/movie/action';
+import { selectMovies } from '../store/movie/reducer';
+import { connect } from 'react-redux';
 
-export default class Home extends Component {
+export class Home extends Component {
 
     state = {
         flower : []
@@ -9,6 +13,7 @@ export default class Home extends Component {
     url = 'https://pixabay.com/api/?key=15908431-b6034a52872cd060420174a7e&q=flower';
     
     async componentDidMount(){
+        this.props.Load()
         await this.flowerData();
     }
 
@@ -19,15 +24,24 @@ export default class Home extends Component {
         this.setState({flower : data.hits})
     }
 
+
+
+   
+    // onClick={async () => await this.props.Load()}
     render() {
         return (
             <div>
                 {
-                this.state.flower.map(x =>
+                this.props.movies.map(x =>
                     <div key={x.id}> 
-                        <h1 >{x.id}</h1> 
-                        <p>{x.likes}</p>
-                        <img src={x.previewURL}></img>
+                        <h1 >{x.name}</h1> 
+                        <p>{x.description}</p>
+                        <Button
+                        variant="contained"
+                        color="primary"
+                            href={x.url}
+                        >
+                            TEST</Button>
                     </div>
                     )
                 }
@@ -35,3 +49,15 @@ export default class Home extends Component {
         )
     }
 }
+
+const mapStateToProps = state => ({
+    movies: selectMovies(state)
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+        Load: () => dispatch(Load())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
