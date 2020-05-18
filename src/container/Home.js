@@ -4,27 +4,13 @@ import {Load} from '../store/movie/action';
 import { selectMovies } from '../store/movie/reducer';
 import { connect } from 'react-redux';
 
+
 export class Home extends Component {
 
-    // state = {
-    //     flower : []
-    // }
 
-    // url = 'https://pixabay.com/api/?key=15908431-b6034a52872cd060420174a7e&q=flower';
-    
     async componentDidMount(){
         this.props.Load()
-        // await this.flowerData();
     }
-
-    // flowerData = async () => {
-    //     let res = await fetch(this.url)
-    //     let data = await res.json()
-    //     console.log(data.hits)
-    //     this.setState({flower : data.hits})
-    // }
-
-
 
    
     // onClick={async () => await this.props.Load()}

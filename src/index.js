@@ -5,7 +5,7 @@ import store from './store'
 import { Provider } from 'react-redux'
 import config from 'react-global-configuration';
 
-// config.set({API : 'http://localhost:8000/api/'});
+config.set({API : 'http://localhost:8000/api/'});
 
 ReactDOM.render(
   <Provider store={store}>

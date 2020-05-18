@@ -1,17 +1,17 @@
 import  axios from 'axios';
 import config from 'react-global-configuration';
 
-// const API = config.get('API');
+
 
 export const Load = data => async dispatch => {
-    console.log(API)
+const API = config.get('API');
     dispatch({
         type: 'LOAD_MOVIES'
     })
 
      await axios({
         method: 'GET',
-        url:`http://localhost:8000/api/movie`,
+        url:`${API}movie`,
     }).then(res => {
         
         dispatch({
