@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect, useSelector } from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme, fade } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -17,8 +17,14 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import Home from '../../../container/Home';
-import Body from '../components/body'
+import * as I from '@material-ui/icons';
+import * as M from '@material-ui/core';
+// import Home from '../../../container/Home';
+import Body from '../components/body';
+import {Load} from '../../../store/movie/action';
+import { selectMovies } from '../../../store/movie/reducer';
+import { connect } from 'react-redux';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -28,8 +34,9 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      duration: theme.transitions.duration.leavingScreen
     }),
+    background: '#320147'
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -76,20 +83,64 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(3),
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  }
 }));
 
-export default function PersistentDrawerLeft() {
+export  function PersistentDrawerLeft({movies, Load}) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [mainMovies, setMovies] = React.useState([])
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+  
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+     Load();
+  },[]);
+
+
 
   return (
     <div className={classes.root}>
@@ -113,6 +164,19 @@ export default function PersistentDrawerLeft() {
           <Typography variant="h6" noWrap>
             FOTH
           </Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <I.Search />
+            </div>
+            <M.InputBase
+              placeholder="Buscar…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -154,8 +218,22 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-        <Home />
+        { movies.length > 0 ? 
+        <Body mainMovies={movies}/>
+        : "No video founds"}
       </main>
     </div>
   );
 }
+
+const mapStateToProps = state => ({
+  movies: selectMovies(state)
+})
+
+const mapDispatchToProps = dispatch => {
+  return {
+      Load: () => dispatch(Load())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PersistentDrawerLeft);

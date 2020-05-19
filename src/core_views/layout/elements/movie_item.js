@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
-import Button from '@material-ui/core/Button';
+import * as M from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import FormRow from '@material-ui/core/FormLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
-import Paper from '@material-ui/core/Paper';
+import imgNoFound from "../../../public/shared/image-not-found.png"
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+
 
 // {
 //     this.props.movies.map(x =>
@@ -26,30 +29,57 @@ const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
     },
-    paper: {
-      padding: theme.spacing(1),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
+    cardSize: {
+      maxWidth: 345,
+    }
   }));
 
-  export default function BodyElement() {
+  export default function BodyElement(data) {
     const classes = useStyles();
   
   
     return (
       <div className={classes.root}>
-        <Grid container spacing={1}>
-          <Grid container item xs={12} spacing={3}>
-            <FormRow />
-          </Grid>
-          <Grid container item xs={12} spacing={3}>
-            <FormRow />
-          </Grid>
-          <Grid container item xs={12} spacing={3}>
-            <FormRow />
-          </Grid>
-        </Grid>
+        <M.Grid container spacing={1}>
+          { data.testVideos.map(v => 
+          <M.Grid key={v.id} item xs={4}>
+            {/* <Router>
+            <Link to={v.url}> */}
+            <M.Card className={classes.cardSize}>
+            <M.CardActionArea>
+              <M.CardMedia 
+                    component="img"
+                    height="140"
+                    image={imgNoFound}
+              />
+              <M.CardContent>
+              <M.Typography gutterBottom variant="h5" component="h2">
+                  {v.name}
+              </M.Typography>
+              <M.Typography variant="body2" color="textSecondary" component="p">
+                   Vistas/Like&Dislikes/Favorito
+              </M.Typography>
+              </M.CardContent>
+            </M.CardActionArea>
+          </M.Card>
+            {/* </Link>
+            </Router> */}
+          </M.Grid>
+       
+              //  <M.Grid item xs={4} key={v.id}>
+              //    <h1 >{v.name}</h1> 
+              //           <p>{v.description}</p>
+              //           <M.Button
+              //           variant="contained"
+              //           color="primary"
+              //               href={v.url}
+              //           >
+              //               TEST</M.Button>
+              //  </M.Grid>
+          )
+          }
+        
+        </M.Grid>
       </div>
     );
   }
