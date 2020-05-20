@@ -3,6 +3,7 @@ version: '3.7'
 services:
   sample-prod:
     container_name: sample-prod
+    env_file: .env
     build:
       context: .
       dockerfile: ./compose/production/react/Dockerfile

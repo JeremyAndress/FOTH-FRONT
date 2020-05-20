@@ -5,7 +5,9 @@ import store from './store'
 import { Provider } from 'react-redux'
 import config from 'react-global-configuration';
 
-config.set({API : 'http://localhost:8000/api/'});
+let URL_BACK = process.env.URL_BACK || 'http://localhost:8000/api/';
+
+config.set({API : URL_BACK});
 
 ReactDOM.render(
   <Provider store={store}>
